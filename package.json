@@ -1,0 +1,44 @@
+{
+  "name": "allincodex",
+  "version": "0.1.0",
+  "description": "Use Kiro (or any local OpenAI-compatible gateway) models inside the official Codex Desktop/CLI in one command, with autostart. Windows-first; built on opencodex.",
+  "bin": {
+    "allincodex": "bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "config/allincodex.config.example.json",
+    "docs/",
+    "README.md",
+    "NOTICE",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "os": [
+    "win32"
+  ],
+  "keywords": [
+    "codex",
+    "opencodex",
+    "kiro",
+    "openai",
+    "anthropic",
+    "proxy",
+    "byok",
+    "cli",
+    "windows"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AgenticLab-SH/allincodex.git"
+  },
+  "homepage": "https://github.com/AgenticLab-SH/allincodex#readme",
+  "bugs": {
+    "url": "https://github.com/AgenticLab-SH/allincodex/issues"
+  },
+  "author": "AgenticLab-SH",
+  "license": "MIT"
+}

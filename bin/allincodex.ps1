@@ -98,6 +98,7 @@ function Invoke-Restore {
 $cfg = Get-AicConfig
 switch ($Command.ToLower()) {
     'setup' { Invoke-Setup -Cfg $cfg }
+    'init' { [void](Initialize-AicUserConfig) }
     'start' { Invoke-Start -Cfg $cfg }
     'status' { Invoke-Doctor -Cfg $cfg }
     'doctor' { Invoke-Doctor -Cfg $cfg }

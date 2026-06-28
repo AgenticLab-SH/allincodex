@@ -18,15 +18,16 @@ It does **not** fork or reimplement [opencodex](https://github.com/lidge-jun/ope
 ## TL;DR
 
 ```powershell
-git clone https://github.com/AgenticLab-SH/allincodex
-cd allincodex
-Copy-Item config\allincodex.config.example.json config\allincodex.config.json
-# edit the copy: point gateway.* at your local OpenAI-compatible gateway, set defaultModel
-.\bin\allincodex.ps1 setup            # install + configure + sync
-.\bin\allincodex.ps1 autostart install
-.\bin\allincodex.ps1 doctor           # verify the chain is healthy
+npm i -g allincodex                  # Windows, Node 18+, PowerShell 7
+allincodex init                      # creates %USERPROFILE%\.allincodex\config.json
+#   edit that file: point gateway.* at your local OpenAI-compatible gateway, set defaultModel
+allincodex setup                     # install opencodex + configure + sync into Codex
+allincodex autostart install         # survive reboot (run elevated for the opencodex service)
+allincodex doctor                    # verify the chain is healthy
 ```
 Then open Codex → the model picker now lists your gateway's models. Works with **any** OpenAI-compatible gateway (Kiro is the reference); it is not tied to a specific provider.
+
+> Prefer from source? `git clone https://github.com/AgenticLab-SH/allincodex` then run `.\bin\allincodex.ps1 <command>`.
 
 ## Why
 
@@ -41,11 +42,20 @@ The Codex Desktop app hides non-OpenAI model slugs behind a server-side allowlis
 
 ## Install
 
+**npm (recommended):**
+```powershell
+npm i -g allincodex
+allincodex init                  # writes %USERPROFILE%\.allincodex\config.json
+# edit that config: gateway.wrapperScript, ports, defaultModel
+allincodex setup
+```
+
+**From source:**
 ```powershell
 git clone https://github.com/AgenticLab-SH/allincodex
 cd allincodex
 Copy-Item config\allincodex.config.example.json config\allincodex.config.json
-# edit config\allincodex.config.json: set gateway.wrapperScript, ports, defaultModel
+# edit the copy
 .\bin\allincodex.ps1 setup
 ```
 
@@ -55,12 +65,15 @@ Copy-Item config\allincodex.config.example.json config\allincodex.config.json
 
 | Command | What it does |
 |---|---|
+| `allincodex init` | Create `~/.allincodex/config.json` from the template (edit it, then setup) |
 | `allincodex setup` | Install + configure + sync (run once) |
 | `allincodex start` | Bring gateway + proxy up, sync models |
 | `allincodex status` / `doctor` | Read-only health of gateway, proxy, Codex injection, autostart |
 | `allincodex autostart install` | Logon autostart: gateway (Startup launcher) + opencodex service |
 | `allincodex autostart uninstall` | Remove the gateway logon launcher |
 | `allincodex restore` | Stop proxy + gateway, restore vanilla Codex (`ocx stop`) |
+| `allincodex about` | Show version, watermark, and authorship commitment |
+| `allincodex verify-author "<phrase>"` | Prove original authorship against the published commitment |
 
 ## Autostart (survive reboot)
 

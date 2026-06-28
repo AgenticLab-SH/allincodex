@@ -25,13 +25,28 @@ function Test-AicAuthor {
 
 $script:AicRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 
+function Get-AicUserConfigPath { return (Join-Path $env:USERPROFILE '.allincodex\config.json') }
+
 function Get-AicConfig {
+    $user = Get-AicUserConfigPath
     $local = Join-Path $script:AicRoot 'config\allincodex.config.json'
     $example = Join-Path $script:AicRoot 'config\allincodex.config.example.json'
-    $path = if (Test-Path $local) { $local } else { $example }
+    # precedence: user-home config (global installs) -> repo-local -> shipped example
+    $path = if (Test-Path $user) { $user } elseif (Test-Path $local) { $local } else { $example }
     $cfg = Get-Content -LiteralPath $path -Raw | ConvertFrom-Json
     $cfg | Add-Member -NotePropertyName '_source' -NotePropertyValue $path -Force
     return $cfg
+}
+
+# Scaffold ~/.allincodex/config.json from the shipped example (does not overwrite).
+function Initialize-AicUserConfig {
+    $user = Get-AicUserConfigPath
+    if (Test-Path $user) { Write-AicInfo ("user config already exists: " + $user); return $user }
+    $example = Join-Path $script:AicRoot 'config\allincodex.config.example.json'
+    New-Item -ItemType Directory -Force -Path (Split-Path $user) | Out-Null
+    Copy-Item -LiteralPath $example -Destination $user -Force
+    Write-AicOk ("created " + $user + " — edit gateway.* and defaultModel, then run: allincodex setup")
+    return $user
 }
 
 function Test-HttpOk {

@@ -1,0 +1,13 @@
+# never publish secrets / local machine state
+config/allincodex.config.json
+**/allincodex.config.json
+*.env
+.env
+*.log
+logs/
+runtime/
+tmp/
+.git/
+.gitignore
+.vscode/
+.idea/
