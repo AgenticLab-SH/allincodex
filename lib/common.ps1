@@ -8,7 +8,7 @@
 # can prove authorship via:  allincodex verify-author "<phrase>"
 $script:AicWatermark        = 'AIC' + [char]0x2726 + 'SH' + [char]0x2726 + '2026'
 $script:AicAuthor          = 'AgenticLab-SH'
-$script:AicAuthorCommitment = '4c4b757e130d8155a32609c191edd769164976edaff1e4798b6d15ad3f872612'
+$script:AicAuthorCommitment = '8249db103d4b5972a6c5a488f51f9b93203b8b8405f4619bde7b20bb8e8032a7'
 
 function Get-AicSha256Hex {
     param([Parameter(Mandatory)][string]$Text)

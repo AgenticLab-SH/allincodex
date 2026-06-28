@@ -13,7 +13,7 @@ Authorship proof (cryptographic commitment)
 The original author holds a secret passphrase. Its SHA-256 commitment is
 published here and in lib/common.ps1 ($AicAuthorCommitment):
 
-    sha256 = 4c4b757e130d8155a32609c191edd769164976edaff1e4798b6d15ad3f872612
+    sha256 = 8249db103d4b5972a6c5a488f51f9b93203b8b8405f4619bde7b20bb8e8032a7
 
 The passphrase itself is NOT contained anywhere in this repository. Only the
 original author can produce a string whose SHA-256 equals the commitment above.
