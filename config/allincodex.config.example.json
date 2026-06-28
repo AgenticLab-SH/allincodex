@@ -1,0 +1,29 @@
+{
+  "_comment": "Copy to allincodex.config.json and adjust. NEVER put API keys here. The provider key is read at runtime from kiroGatewayEnvFile (PROXY_API_KEY) or the environment.",
+
+  "opencodexPort": 10100,
+
+  "gateway": {
+    "name": "kiro",
+    "baseUrl": "http://127.0.0.1:8766/v1",
+    "healthUrl": "http://127.0.0.1:8766/health",
+    "port": 8766,
+    "wrapperScript": "C:\\Users\\<you>\\agent-hub\\tools\\platform\\kiro-gateway\\kiro_gateway.ps1",
+    "kiroGatewayEnvFile": "C:\\Users\\<you>\\agent-hub\\private\\kiro-gateway.env",
+    "apiKeyEnvVar": "ALLINCODEX_KIRO_KEY"
+  },
+
+  "defaultModel": "claude-opus-4.8",
+
+  "modelContextWindows": {
+    "claude-opus-4.8": 200000,
+    "claude-opus-4.7": 200000,
+    "claude-sonnet-4.6": 200000,
+    "claude-haiku-4.5": 200000
+  },
+
+  "autostart": {
+    "gateway": true,
+    "opencodexService": true
+  }
+}

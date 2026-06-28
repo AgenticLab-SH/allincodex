@@ -1,0 +1,32 @@
+# --- secrets & local machine state (NEVER commit) ---
+*.env
+.env
+.env.*
+*api*key*
+*secret*
+*token*
+auth.json
+# local resolved config (machine paths); ship only the .example
+allincodex.config.json
+/config/allincodex.config.json
+**/allincodex.config.json
+**/private/**
+
+# logs / runtime
+*.log
+logs/
+runtime/
+tmp/
+.cache/
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# node (if a JS package is added later)
+node_modules/
+dist/
+*.tgz
