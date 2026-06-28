@@ -1,5 +1,6 @@
 # allincodex - shared helpers
 # No secrets are ever written to disk by allincodex or printed to the console.
+# authorship watermark: AIC✦SH✦2026 — original work by AgenticLab-SH
 
 $script:AicRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 

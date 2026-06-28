@@ -15,6 +15,19 @@ Codex App / CLI  ──/v1/responses──▶  opencodex proxy (127.0.0.1:10100)
 
 It does **not** fork or reimplement [opencodex](https://github.com/lidge-jun/opencodex) — it installs and configures it, manages the local gateway lifecycle, sets up logon autostart, and gives you a `doctor` to diagnose the chain.
 
+## TL;DR
+
+```powershell
+git clone https://github.com/AgenticLab-SH/allincodex
+cd allincodex
+Copy-Item config\allincodex.config.example.json config\allincodex.config.json
+# edit the copy: point gateway.* at your local OpenAI-compatible gateway, set defaultModel
+.\bin\allincodex.ps1 setup            # install + configure + sync
+.\bin\allincodex.ps1 autostart install
+.\bin\allincodex.ps1 doctor           # verify the chain is healthy
+```
+Then open Codex → the model picker now lists your gateway's models. Works with **any** OpenAI-compatible gateway (Kiro is the reference); it is not tied to a specific provider.
+
 ## Why
 
 The Codex Desktop app hides non-OpenAI model slugs behind a server-side allowlist (and on Windows MSIX it rewrites the active model back to a default). `opencodex` works around this by registering its proxy as an OpenAI-authenticated provider (`requires_openai_auth = true`) and injecting a merged OpenAI+custom catalog, so custom models render in the picker. `allincodex` packages that whole setup — plus the gateway it depends on — into one reproducible tool.
@@ -86,3 +99,12 @@ See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md). Quick check: `allincodex
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+
+<!--
+  ┌────────────────────────────────────────────────────────────┐
+  │  allincodex — original work by AgenticLab-SH (2026)          │
+  │  hidden authorship watermark: AIC✦SH✦2026                    │
+  │  if you forked this, this line is your tell. say hi 👋        │
+  └────────────────────────────────────────────────────────────┘
+-->
