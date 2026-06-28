@@ -1,4 +1,5 @@
 # allincodex - local OpenAI-compatible gateway lifecycle (reference: kiro-gateway)
+# authorship watermark: AIC✦SH✦2026 — original work by AgenticLab-SH
 
 function Test-GatewayUp {
     param([Parameter(Mandatory)]$Cfg)

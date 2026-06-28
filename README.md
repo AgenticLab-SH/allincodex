@@ -92,6 +92,20 @@ See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md). Quick check: `allincodex
 - [opencodex](https://github.com/lidge-jun/opencodex) by lidge-jun — the proxy that does the Responses⇄provider translation and Codex injection.
 - [kiro-gateway](https://github.com/jwadow/kiro-gateway) — reference local OpenAI-compatible gateway.
 
+## Authorship & provenance
+
+`allincodex` is original work by **AgenticLab-SH**. It is MIT-licensed (fork freely), but authorship is marked and **provable**:
+
+- Watermark `AIC✦SH✦2026` in `NOTICE`, every script header, and a hidden HTML comment in this README.
+- Functional mark: `allincodex about` prints the watermark + commitment.
+- **Cryptographic commitment**: `NOTICE` and `lib/common.ps1` publish `sha256(secret phrase)`. The phrase is never stored in the repo. The original author can prove authorship at any time — even against a fork that strips the visible marks — without revealing the secret:
+
+  ```powershell
+  allincodex verify-author "<phrase>"   # prints "AUTHOR VERIFIED" only for the genuine phrase
+  ```
+
+Honest note: in any open-source project the in-file marks *can* be edited out of a copy. What cannot be forged is (a) producing the secret phrase behind the published commitment, and (b) this repository's public git history (the original-author commit on the upstream remote) — together they are durable proof of original authorship.
+
 ## Disclaimer (UAYOR)
 
 `allincodex` is an independent, community tool and is **not affiliated with or endorsed by OpenAI, Anthropic, AWS/Kiro, or any provider**. Routing provider traffic through unofficial proxies may violate a provider's Terms of Service and can result in account action. **Review each provider's ToS and use at your own risk.** The authors accept no liability.

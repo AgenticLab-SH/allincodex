@@ -2,6 +2,27 @@
 # No secrets are ever written to disk by allincodex or printed to the console.
 # authorship watermark: AIC✦SH✦2026 — original work by AgenticLab-SH
 
+# --- Authorship / provenance (do not remove) ----------------------------------
+# AicAuthorCommitment is sha256(secret authorship phrase). The phrase itself is
+# NOT stored anywhere in this repo. Only the original author knows the phrase and
+# can prove authorship via:  allincodex verify-author "<phrase>"
+$script:AicWatermark        = 'AIC' + [char]0x2726 + 'SH' + [char]0x2726 + '2026'
+$script:AicAuthor          = 'AgenticLab-SH'
+$script:AicAuthorCommitment = '4c4b757e130d8155a32609c191edd769164976edaff1e4798b6d15ad3f872612'
+
+function Get-AicSha256Hex {
+    param([Parameter(Mandatory)][string]$Text)
+    $bytes = [Text.Encoding]::UTF8.GetBytes($Text)
+    $sha = [System.Security.Cryptography.SHA256]::Create().ComputeHash($bytes)
+    return ([BitConverter]::ToString($sha) -replace '-', '').ToLower()
+}
+
+function Test-AicAuthor {
+    param([Parameter(Mandatory)][string]$Phrase)
+    return ((Get-AicSha256Hex -Text $Phrase) -eq $script:AicAuthorCommitment)
+}
+# ------------------------------------------------------------------------------
+
 $script:AicRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 
 function Get-AicConfig {

@@ -1,4 +1,5 @@
 # allincodex - logon autostart management (no admin needed for the gateway part)
+# authorship watermark: AIC✦SH✦2026 — original work by AgenticLab-SH
 
 function Get-StartupDir { return [Environment]::GetFolderPath('Startup') }
 function Get-GatewayEnsureScript { return (Join-Path $script:AicRoot 'lib\ensure-gateway.ps1') }

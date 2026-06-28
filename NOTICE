@@ -1,0 +1,33 @@
+allincodex
+==========
+
+Original work by AgenticLab-SH (2026).
+Authorship watermark: AIC✦SH✦2026
+
+This software is distributed under the MIT License (see LICENSE). The MIT
+License permits reuse and forking, but this NOTICE and the authorship marks
+should be retained in redistributions as attribution.
+
+Authorship proof (cryptographic commitment)
+--------------------------------------------
+The original author holds a secret passphrase. Its SHA-256 commitment is
+published here and in lib/common.ps1 ($AicAuthorCommitment):
+
+    sha256 = 4c4b757e130d8155a32609c191edd769164976edaff1e4798b6d15ad3f872612
+
+The passphrase itself is NOT contained anywhere in this repository. Only the
+original author can produce a string whose SHA-256 equals the commitment above.
+Anyone can verify a claimed phrase with:
+
+    allincodex verify-author "<phrase>"
+
+A correct phrase prints "AUTHOR VERIFIED". This lets the original author prove
+authorship at any time, even against a fork that strips the visible marks, while
+never revealing the secret.
+
+Upstream: https://github.com/AgenticLab-SH/allincodex
+
+Credits
+-------
+- opencodex (https://github.com/lidge-jun/opencodex) — Responses<->provider proxy
+- kiro-gateway (https://github.com/jwadow/kiro-gateway) — reference local gateway

@@ -28,8 +28,17 @@ function Show-Help {
     Get-Content -LiteralPath $PSCommandPath | Select-Object -First 18 | ForEach-Object { $_ -replace '^#\s?', '' } | Select-Object -Skip 1
 }
 
+function Invoke-About {
+    Write-Host ('allincodex ' + $script:AicWatermark)
+    Write-Host ('  author     : ' + $script:AicAuthor)
+    Write-Host ('  commitment : sha256 ' + $script:AicAuthorCommitment)
+    Write-Host ('  prove it   : allincodex verify-author "<secret phrase>"')
+    Write-Host ('  upstream   : https://github.com/AgenticLab-SH/allincodex')
+}
+
 function Invoke-Doctor {
     param($Cfg)
+    Write-Host ('  build : ' + $script:AicWatermark + ' by ' + $script:AicAuthor)
     Write-AicInfo ("config source: " + $Cfg._source)
     $gw = Test-GatewayUp -Cfg $Cfg
     $px = Get-OpencodexProxyUp -Cfg $Cfg
@@ -93,6 +102,17 @@ switch ($Command.ToLower()) {
     'status' { Invoke-Doctor -Cfg $cfg }
     'doctor' { Invoke-Doctor -Cfg $cfg }
     'restore' { Invoke-Restore -Cfg $cfg }
+    'version' { Invoke-About }
+    'about' { Invoke-About }
+    'verify-author' {
+        if (-not $Sub) { Write-AicErr 'usage: allincodex verify-author "<phrase>"'; break }
+        if (Test-AicAuthor -Phrase $Sub) {
+            Write-AicOk ('AUTHOR VERIFIED - ' + $script:AicAuthor + ' (' + $script:AicWatermark + ')')
+        }
+        else {
+            Write-AicErr 'author verification FAILED (phrase does not match commitment)'
+        }
+    }
     'autostart' {
         switch ($Sub.ToLower()) {
             'install' { Install-GatewayAutostart -Cfg $cfg; if ($cfg.autostart.opencodexService) { Install-OpencodexAutostart } }

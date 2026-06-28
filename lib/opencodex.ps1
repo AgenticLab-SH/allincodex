@@ -1,5 +1,6 @@
 # allincodex - opencodex (@bitkyc08/opencodex, CLI `ocx`) orchestration
 # allincodex does NOT reimplement opencodex; it installs and configures it.
+# authorship watermark: AIC✦SH✦2026 — original work by AgenticLab-SH
 
 function Test-OpencodexInstalled { return (Test-Command -Name 'ocx') }
 
