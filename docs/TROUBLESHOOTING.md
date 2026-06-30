@@ -2,8 +2,15 @@
 
 Run `allincodex doctor` first — it reports the health of each layer.
 
+Also run `allincodex upstream check` when behavior differs from these docs.
+`opencodex` changes quickly; current versions provide `ocx ensure`,
+`ocx sync-cache`, `ocx codex-shim`, and `ocx update`.
+
 ## Models don't appear in the Codex app picker
 - Ensure `ocx sync` ran (it injects the merged catalog). `allincodex start` does this.
+- On current opencodex versions, `allincodex start` prefers `ocx ensure` and
+  `ocx sync-cache`. If those commands are missing, update opencodex or use the
+  legacy `ocx start` / `ocx sync` path.
 - The default model in `~/.codex/config.toml` must be a recognized slug (e.g. `gpt-5.5`) so MSIX Codex doesn't reset it. opencodex sets this; don't override with an unknown slug.
 - Fully close and reopen Codex so it reloads config on startup (the catalog is read at launch).
 

@@ -5,11 +5,19 @@
   "bin": {
     "allincodex": "bin/cli.js"
   },
+  "scripts": {
+    "test": "pwsh -NoProfile -ExecutionPolicy Bypass -File ./tools/smoke-test.ps1",
+    "test:network": "pwsh -NoProfile -ExecutionPolicy Bypass -File ./tools/smoke-test.ps1 -Network"
+  },
   "files": [
     "bin/",
     "lib/",
     "config/allincodex.config.example.json",
+    "config/upstreams.json",
     "docs/",
+    "tools/smoke-test.ps1",
+    "AGENTS.md",
+    "TODO.md",
     "README.md",
     "NOTICE",
     "LICENSE"

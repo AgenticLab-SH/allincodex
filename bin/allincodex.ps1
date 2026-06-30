@@ -14,7 +14,8 @@
 
 param(
     [Parameter(Position = 0)][string]$Command = 'help',
-    [Parameter(Position = 1)][string]$Sub = ''
+    [Parameter(Position = 1)][string]$Sub = '',
+    [Parameter(ValueFromRemainingArguments = $true)][string[]]$Rest = @()
 )
 
 $ErrorActionPreference = 'Stop'
@@ -23,9 +24,25 @@ $libDir = Join-Path (Split-Path -Parent $PSScriptRoot) 'lib'
 . (Join-Path $libDir 'gateway.ps1')
 . (Join-Path $libDir 'opencodex.ps1')
 . (Join-Path $libDir 'autostart.ps1')
+. (Join-Path $libDir 'upstream.ps1')
 
 function Show-Help {
-    Get-Content -LiteralPath $PSCommandPath | Select-Object -First 18 | ForEach-Object { $_ -replace '^#\s?', '' } | Select-Object -Skip 1
+    @"
+allincodex - one-command orchestrator for Codex + opencodex + local gateways
+
+Usage:
+  allincodex init
+  allincodex setup
+  allincodex start
+  allincodex status | doctor
+  allincodex upstream check [--json]
+  allincodex upstream sync [--json]
+  allincodex update opencodex
+  allincodex update kiro-gateway
+  allincodex autostart install|uninstall
+  allincodex restore
+  allincodex about
+"@
 }
 
 function Invoke-About {
@@ -40,6 +57,7 @@ function Invoke-Doctor {
     param($Cfg)
     Write-Host ('  build : ' + $script:AicWatermark + ' by ' + $script:AicAuthor)
     Write-AicInfo ("config source: " + $Cfg._source)
+    Write-Host ("  opencodex version : " + (Get-OpencodexVersion))
     $gw = Test-GatewayUp -Cfg $Cfg
     $px = Get-OpencodexProxyUp -Cfg $Cfg
     Write-Host ("  gateway " + $Cfg.gateway.healthUrl + " : " + $(if ($gw) { 'OK' } else { 'DOWN' }))
@@ -62,17 +80,21 @@ function Invoke-Doctor {
 function Invoke-Start {
     param($Cfg)
     [void](Start-Gateway -Cfg $Cfg)
-    if (-not (Get-OpencodexProxyUp -Cfg $Cfg)) {
-        if (-not (Test-OpencodexInstalled)) { Write-AicErr 'opencodex not installed. Run: allincodex setup'; return }
-        Write-AicInfo 'starting opencodex proxy (detached) ...'
+    if (-not (Test-OpencodexInstalled)) { Write-AicErr 'opencodex not installed. Run: allincodex setup'; return }
+    if (Test-OpencodexCommand -Subcommand 'ensure') {
+        Write-AicInfo 'ensuring opencodex proxy + Codex cache (ocx ensure) ...'
+        ocx ensure 2>&1 | Select-Object -Last 6 | ForEach-Object { Write-Host ("  " + $_) }
+    }
+    elseif (-not (Get-OpencodexProxyUp -Cfg $Cfg)) {
+        Write-AicInfo 'starting opencodex proxy (detached, legacy path) ...'
         Start-Process -FilePath 'pwsh' -ArgumentList @('-NoProfile', '-Command', 'ocx start') -WindowStyle Hidden
-        for ($i = 0; $i -lt 30; $i++) {
-            if (Get-OpencodexProxyUp -Cfg $Cfg) { break }
-            Start-Sleep -Milliseconds 700
-        }
+    }
+    for ($i = 0; $i -lt 30; $i++) {
+        if (Get-OpencodexProxyUp -Cfg $Cfg) { break }
+        Start-Sleep -Milliseconds 700
     }
     if (Get-OpencodexProxyUp -Cfg $Cfg) { Write-AicOk 'opencodex proxy healthy' } else { Write-AicWarn 'opencodex proxy did not come up' }
-    Invoke-OpencodexSync
+    if (Test-OpencodexCommand -Subcommand 'sync-cache') { Invoke-OpencodexSyncCache } else { Invoke-OpencodexSync }
     Write-AicOk 'allincodex start complete. Open Codex and pick a gateway model.'
 }
 
@@ -103,6 +125,20 @@ switch ($Command.ToLower()) {
     'status' { Invoke-Doctor -Cfg $cfg }
     'doctor' { Invoke-Doctor -Cfg $cfg }
     'restore' { Invoke-Restore -Cfg $cfg }
+    'upstream' {
+        switch ($Sub.ToLower()) {
+            'check' { Invoke-AicUpstreamCheck -AsJson:($Rest -contains '--json') }
+            'sync' { Invoke-AicUpstreamSync -AsJson:($Rest -contains '--json') }
+            default { Write-AicErr 'usage: allincodex upstream <check|sync> [--json]' }
+        }
+    }
+    'update' {
+        switch ($Sub.ToLower()) {
+            'opencodex' { Invoke-OpencodexUpdate }
+            'kiro-gateway' { Invoke-AicKiroGatewayUpdate -Cfg $cfg }
+            default { Write-AicErr 'usage: allincodex update <opencodex|kiro-gateway>' }
+        }
+    }
     'version' { Invoke-About }
     'about' { Invoke-About }
     'verify-author' {

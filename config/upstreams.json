@@ -1,0 +1,20 @@
+{
+  "$schema": "allincodex upstream watch list",
+  "todoFile": "TODO.md",
+  "upstreams": [
+    {
+      "id": "opencodex",
+      "package": "@bitkyc08/opencodex",
+      "repo": "https://github.com/lidge-jun/opencodex.git",
+      "cacheClone": ".upstream/opencodex",
+      "notes": "Primary proxy. Check npm latest and GitHub HEAD before changing wrappers."
+    },
+    {
+      "id": "kiro-gateway",
+      "repo": "https://github.com/jwadow/kiro-gateway.git",
+      "localClone": "C:/Users/kshcg/agent-hub/tools/gateways/kiro-gateway",
+      "cacheClone": ".upstream/kiro-gateway",
+      "notes": "Reference local OpenAI-compatible gateway. Preserve local dirty changes."
+    }
+  ]
+}

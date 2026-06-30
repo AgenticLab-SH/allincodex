@@ -69,6 +69,10 @@ Copy-Item config\allincodex.config.example.json config\allincodex.config.json
 | `allincodex setup` | Install + configure + sync (run once) |
 | `allincodex start` | Bring gateway + proxy up, sync models |
 | `allincodex status` / `doctor` | Read-only health of gateway, proxy, Codex injection, autostart |
+| `allincodex upstream check` | Check opencodex npm/GitHub and kiro-gateway GitHub, then refresh `TODO.md` |
+| `allincodex upstream sync` | Clone/fetch upstream source caches under `.upstream/` for agent review |
+| `allincodex update opencodex` | Update the local `ocx` install using opencodex's updater when available |
+| `allincodex update kiro-gateway` | Safely fast-forward the local gateway clone only when it has no dirty changes |
 | `allincodex autostart install` | Logon autostart: gateway (Startup launcher) + opencodex service |
 | `allincodex autostart uninstall` | Remove the gateway logon launcher |
 | `allincodex restore` | Stop proxy + gateway, restore vanilla Codex (`ocx stop`) |
@@ -93,8 +97,21 @@ Both layers are idempotent and self-healing (opencodex auto-restarts on crash; t
 
 ## How it works
 
-`allincodex` writes `~/.opencodex/config.json` with your gateway as an `openai-chat` provider (key by env reference) and runs `ocx sync`, which injects into `~/.codex/config.toml`:
+`allincodex` writes `~/.opencodex/config.json` with your gateway as an `openai-chat` provider (key by env reference) and uses the current opencodex lifecycle commands (`ocx ensure`, then `ocx sync-cache` when available; legacy installs fall back to `ocx start` + `ocx sync`). This injects into `~/.codex/config.toml`:
 `model_provider = "opencodex"`, a merged model catalog, and `requires_openai_auth = true` so the Codex picker shows the models. The default model stays a recognized slug so the app does not reset it.
+
+## Upstream watch
+
+Because [opencodex](https://github.com/lidge-jun/opencodex) and [kiro-gateway](https://github.com/jwadow/kiro-gateway) move quickly, this repo includes a project-local watch list:
+
+```powershell
+allincodex upstream check        # network read; updates TODO.md
+allincodex upstream check --json # machine-readable for agents
+allincodex upstream sync         # downloads/fetches source caches under .upstream/
+allincodex update kiro-gateway   # refuses to pull if local gateway files are dirty
+```
+
+Future Codex/Claude agents should read `AGENTS.md`, run the check, and use `TODO.md` as the local follow-up surface before changing integration code.
 
 ## Troubleshooting
 
